@@ -37,6 +37,7 @@ jobs:
           name: jar
           path: target/*.jar
 
+     # Set up JFrog CLI (this installs & configures it)
       - name: Set up JFrog CLI
         uses: jfrog/setup-jfrog-cli@v3
         with:
@@ -44,25 +45,17 @@ jobs:
         env:
           JF_URL: ${{ secrets.JFROG_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.JFROG_TOKEN }}
-      
+
+      # Use 'jf' inside a single shell script
       - name: Upload JAR to Artifactory with Commit ID and Date
+        shell: bash
         run: |
-          # Extract commit ID (first 7 chars of GITHUB_SHA)
+          echo "✅ Uploading artifact..."
           COMMIT_ID=$(echo $GITHUB_SHA | cut -c1-7)
-          
-          # Get the current date
           DATE=$(date +'%Y-%m-%d')
-          
-          # Construct the upload path
-          PATH="calculator-local/test/com/${DATE}-${COMMIT_ID}/"
-          
-          # Debugging output to verify the path
-          echo "Commit ID: $COMMIT_ID"
-          echo "Date: $DATE"
-          echo "Upload path: $PATH"
-          
-          # Perform the upload to Artifactory
-          jf rt upload "target/*.jar" "$PATH" --flat=true
+          ARTIFACTORY_PATH="calculator-local/test/com/${DATE}-${COMMIT_ID}/"
+          echo "Uploading to: $ARTIFACTORY_PATH"
+          jf rt upload "target/*.jar" "$ARTIFACTORY_PATH" --flat=true
 
         
 
