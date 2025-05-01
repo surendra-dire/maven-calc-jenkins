@@ -47,11 +47,23 @@ jobs:
       
       - name: Upload JAR to Artifactory with Commit ID and Date
         run: |
+          # Extract commit ID (first 7 chars of GITHUB_SHA)
           COMMIT_ID=$(echo $GITHUB_SHA | cut -c1-7)
+          
+          # Get the current date
           DATE=$(date +'%Y-%m-%d')
+          
+          # Construct the upload path
           PATH="calculator-local/test/com/${DATE}-${COMMIT_ID}/"
-          echo "Uploading to path: $PATH"
+          
+          # Debugging output to verify the path
+          echo "Commit ID: $COMMIT_ID"
+          echo "Date: $DATE"
+          echo "Upload path: $PATH"
+          
+          # Perform the upload to Artifactory
           jf rt upload "target/*.jar" "$PATH" --flat=true
+
         
 
      # - name: Upload JAR to Artifactory
