@@ -47,5 +47,5 @@ jobs:
 
       - name: Upload JAR to Artifactory
         run: |
-          jf rt upload "target/*.jar" "calculator-local"
+          jf rt upload "target/*.jar" "calculator-local/"
           #jf rt upload "target/*.jar" "libs-release-local/com/mycompany/app/${{ github.run_number }}/"
