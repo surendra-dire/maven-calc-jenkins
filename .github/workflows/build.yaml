@@ -35,4 +35,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jar
-          path: target/*.jar  
+          path: target/*.jar
+
+      - name: Set up JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v3
+        with:
+          version: latest
+        env:
+          JF_URL: ${{ secrets.JFROG_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JFROG_TOKEN }}
+
+      - name: Upload JAR to Artifactory
+        run: |
+          jf rt upload "target/*.jar" "calculator/${{ github.run_number }}/"
+          #jf rt upload "target/*.jar" "libs-release-local/com/mycompany/app/${{ github.run_number }}/"
