@@ -4,7 +4,7 @@ public class Calculator {
 
     // Adds two integers
     public int add(int a, int b) {
-        return a + b;
+        return a + b; 
     }
 
     // Subtracts b from a
