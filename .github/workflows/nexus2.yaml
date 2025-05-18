@@ -41,6 +41,21 @@ jobs:
         with:
           name: jar
           path: target/*.jar
+
+        # Check SNAPSHOT or Release version from pom.xml
+      - name: Get version info
+        id: version-info
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Project version: $VERSION"
+          
+          if [[ $VERSION == *-SNAPSHOT ]]; then
+            echo "version_type=snapshot" >> $GITHUB_OUTPUT
+            echo "nexus_repo=snapshots" >> $GITHUB_OUTPUT
+          else
+            echo "version_type=release" >> $GITHUB_OUTPUT
+            echo "nexus_repo=releases" >> $GITHUB_OUTPUT
+          fi
           
       # Configure nexus
       - name: Configure Maven for Nexus
