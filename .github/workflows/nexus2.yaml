@@ -61,26 +61,6 @@ jobs:
             printf "nexus_repo=release\n" >> "$GITHUB_OUTPUT"
           fi
      
-      # Configure nexus
-      - name: Configure Maven for Nexus
-        uses: s4u/maven-settings-action@v2
-        with:
-          servers: '[{ "id": "nexus", "username": "${{ secrets.NEXUS_USERNAME }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }]'
-      - name: Deploy main JAR only to Nexus 
-        run: |
-          JAR_FILE=$(find target -type f -name "*.jar" | head -n 1)
-          echo "Found JAR: $JAR_FILE"
-          
-          mvn deploy:deploy-file \
-            -Dfile="$JAR_FILE" \
-            -DgroupId=com.example \
-            -DartifactId=maven-calc-jenkins \
-            -Dversion=${{ steps.version-info.outputs.version }} \
-            -Dpackaging=jar \
-            -DrepositoryId=nexus \
-            -Durl=http://192.168.178.94:8082/repository/Calc-maven-hosted-repo/ \
-            -DgeneratePom=true
-
       #  Deploy to appropriate Nexus repository
       - name: Deploy main JAR only to Nexus 
         run: |
