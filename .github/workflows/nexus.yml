@@ -47,7 +47,6 @@ jobs:
         run: |
           echo "Deploying to Nexus repository: ${{ steps.version-info.outputs.nexus_repo }}"
           
-          mvn deploy -DskipTests \
-            -DaltDeploymentRepository=nexus::default::http://${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}@192.168.178.94:8082/repository/Calc-maven-hosted-repo/
+          mvn deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}@192.168.178.94:8082/repository/Calc-maven-hosted-repo/
 
       
