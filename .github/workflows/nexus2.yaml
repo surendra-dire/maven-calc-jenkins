@@ -42,6 +42,12 @@ jobs:
           name: jar
           path: target/*.jar
 
+      # Copnfigure maven
+      - name: Configure Maven for Nexus
+        uses: s4u/maven-settings-action@v2
+        with:
+          servers: '[{ "id": "nexus", "username": "${{ secrets.NEXUS_USERNAME }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }]'
+
       #  Deploy to appropriate Nexus repository
       - name: Deploy main JAR only to Nexus
         run: |
