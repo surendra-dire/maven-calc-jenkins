@@ -74,7 +74,7 @@ jobs:
             -Dfile="$JAR_FILE" \
             -DgroupId=com.example \
             -DartifactId=maven-calc-jenkins \
-            -Dversion=${{steps.version-info.outputs.version}} \
+            -Dversion=${{ steps.version-info.outputs.version }} \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
             -Durl=http://192.168.178.94:8082/repository/Calc-maven-hosted-repo/ \
