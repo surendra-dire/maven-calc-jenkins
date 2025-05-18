@@ -50,15 +50,13 @@ jobs:
           echo "Project version: $VERSION"
           
           if [[ $VERSION == *-SNAPSHOT ]]; then
-            echo "version_type=SNAPSHOT" >> $GITHUB_OUTPUT
-            echo "nexus_repo=SNAPSHOT" >> $GITHUB_OUTPUT
+            echo "version_type=snapshot" >> $GITHUB_OUTPUT
+            echo "nexus_repo=snapshot" >> $GITHUB_OUTPUT
           else
-            echo "version_type=RELEASE" >> $GITHUB_OUTPUT
-            echo "nexus_repo=RELEASE" >> $GITHUB_OUTPUT
+            echo "version_type=release" >> $GITHUB_OUTPUT
+            echo "nexus_repo=release" >> $GITHUB_OUTPUT
           fi
-
-           echo "Vvalue1 of $GITHUB_OUTPUT ": $GITHUB_OUTPUT
-           echo "Vvalue2 of $GITHUB_OUTPUT ": $GITHUB_OUTPUT
+          echo " 111111111122" ${{steps.set-creds.outputs.version_type}}
           
       # Configure nexus
       - name: Configure Maven for Nexus
@@ -79,5 +77,5 @@ jobs:
             -Dversion=1.0.0 \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
-            -Durl=http://192.168.178.94:8082/repository/Calc-maven-release-repo/ \
+            -Durl=http://192.168.178.94:8082/repository/Calc-maven-${{steps.set-creds.outputs.version_type}}-repo/ \
             -DgeneratePom=true
