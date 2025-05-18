@@ -42,29 +42,6 @@ jobs:
           name: jar
           path: target/*.jar
 
-     # Set up JFrog CLI (this installs & configures it)
-      - name: Set up JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v3
-        with:
-          version: latest
-        env:
-          JF_URL: ${{ secrets.JFROG_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.JFROG_TOKEN }}
-
-      # Check repository version snapshot or release from pom.xml
-      - name: Get version info
-        id: version-info
-        run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "Project version: $VERSION"
-          
-          if [[ $VERSION == *-SNAPSHOT ]]; then
-            echo "version_type=snapshot" >> $GITHUB_OUTPUT
-            echo "nexus_repo=snapshots" >> $GITHUB_OUTPUT
-          else
-            echo "version_type=release" >> $GITHUB_OUTPUT
-            echo "nexus_repo=releases" >> $GITHUB_OUTPUT
-          fi
       #  Deploy to appropriate Nexus repository
       - name: Deploy to Nexus
         run: |
