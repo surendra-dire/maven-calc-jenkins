@@ -50,12 +50,15 @@ jobs:
           echo "Project version: $VERSION"
           
           if [[ $VERSION == *-SNAPSHOT ]]; then
-            echo "version_type=snapshot" >> $GITHUB_OUTPUT
-            echo "nexus_repo=snapshots" >> $GITHUB_OUTPUT
+            echo "version_type=SNAPSHOT" >> $GITHUB_OUTPUT
+            echo "nexus_repo=SNAPSHOT" >> $GITHUB_OUTPUT
           else
-            echo "version_type=release" >> $GITHUB_OUTPUT
-            echo "nexus_repo=releases" >> $GITHUB_OUTPUT
+            echo "version_type=RELEASE" >> $GITHUB_OUTPUT
+            echo "nexus_repo=RELEASE" >> $GITHUB_OUTPUT
           fi
+
+           echo "Vvalue1 of $GITHUB_OUTPUT ": $GITHUB_OUTPUT
+           echo "Vvalue2 of $GITHUB_OUTPUT ": $GITHUB_OUTPUT
           
       # Configure nexus
       - name: Configure Maven for Nexus
