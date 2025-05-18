@@ -9,7 +9,7 @@
   <!-- Group and Artifact Information -->
   <groupId>com.example</groupId>
   <artifactId>maven-calc-jenkins</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <!-- Properties (Java Version) -->
