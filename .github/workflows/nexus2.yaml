@@ -77,5 +77,5 @@ jobs:
             -Dversion=1.0.0 \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
-            -Durl=http://192.168.178.94:8082/repository/Calc-maven-snapshot-repo/ \
+            -Durl=http://192.168.178.94:8082/repository/Calc-maven-hosted-repo/ \
             -DgeneratePom=true
