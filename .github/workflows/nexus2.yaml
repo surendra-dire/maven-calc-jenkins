@@ -46,18 +46,24 @@ jobs:
       - name: Get version info
         id: version-info
         run: |
-          RAW_VERSION=$(mvn help:evaluate -Dexpression=project.version -DforceStdout -q | grep -E '^[0-9]+\.[0-9]+.*$' | tr -d '\r\033')
-          echo "Cleaned version: $RAW_VERSION"
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -DforceStdout -q \
+            | grep -E '^[0-9]+\.[0-9]+.*$' \
+            | sed 's/\x1B\[[0-9;]*[a-zA-Z]//g' \
+            | tr -d '\r')
       
-          printf "version=%s\n" "$RAW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Cleaned Maven version: '$VERSION'"
       
-          if [[ "$RAW_VERSION" == *-SNAPSHOT ]]; then
-            printf "version_type=snapshot\n" >> "$GITHUB_OUTPUT"
-            printf "nexus_repo=snapshot\n" >> "$GITHUB_OUTPUT"
+          # Output clean version to GitHub Actions
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      
+          if [[ "$VERSION" == *-SNAPSHOT ]]; then
+            echo "version_type=snapshot" >> "$GITHUB_OUTPUT"
+            echo "nexus_repo=snapshot" >> "$GITHUB_OUTPUT"
           else
-            printf "version_type=release\n" >> "$GITHUB_OUTPUT"
-            printf "nexus_repo=release\n" >> "$GITHUB_OUTPUT"
+            echo "version_type=release" >> "$GITHUB_OUTPUT"
+            echo "nexus_repo=release" >> "$GITHUB_OUTPUT"
           fi
+
 
      # Configure nexus
 
