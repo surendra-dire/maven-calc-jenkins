@@ -2,10 +2,6 @@
 name: Build
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
   
 env:
@@ -19,7 +15,7 @@ env:
   
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: vbox
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
