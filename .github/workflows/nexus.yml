@@ -15,7 +15,7 @@ env:
   
 jobs:
   build:
-    runs-on: vbox
+    runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
