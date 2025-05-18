@@ -10,8 +10,8 @@ on:
 
 jobs:
   build:
-    #runs-on: ubuntu-latest
-    runs-on: SURENDRA-PC
+    runs-on: ubuntu-latest
+    #runs-on: [self-hosted, Windows]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
