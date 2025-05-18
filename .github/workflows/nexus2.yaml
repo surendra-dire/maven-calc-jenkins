@@ -59,7 +59,13 @@ jobs:
             printf "nexus_repo=release\n" >> "$GITHUB_OUTPUT"
           fi
 
-     
+     # Configure nexus
+
+      - name: Configure Maven for Nexus
+        uses: s4u/maven-settings-action@v2
+        with:
+          servers: '[{ "id": "nexus", "username": "${{ secrets.NEXUS_USERNAME }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }]'
+          
       #  Deploy to appropriate Nexus repository
       - name: Deploy main JAR only to Nexus 
         run: |
