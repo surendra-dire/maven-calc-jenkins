@@ -15,7 +15,7 @@ env:
   
 jobs:
   build:
-    runs-on: [self-hosted, Windows]
+    runs-on: [self-hosted, Lunux]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'adopt'
           cache: maven
 
