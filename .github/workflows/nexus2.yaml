@@ -56,7 +56,7 @@ jobs:
             echo "version_type=release" >> $GITHUB_OUTPUT
             echo "nexus_repo=release" >> $GITHUB_OUTPUT
           fi
-          echo " 111111111122" ${{steps.set-creds.outputs.version_type}}
+          echo " 111111111122" ${{steps.set-creds.outputs.version}}
           
       # Configure nexus
       - name: Configure Maven for Nexus
@@ -74,7 +74,7 @@ jobs:
             -Dfile="$JAR_FILE" \
             -DgroupId=com.example \
             -DartifactId=maven-calc-jenkins \
-            -Dversion=${{steps.set-creds.outputs.version_type}} \
+            -Dversion=${{steps.set-creds.outputs.version}} \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
             -Durl=http://192.168.178.94:8082/repository/Calc-maven-hosted-repo/ \
