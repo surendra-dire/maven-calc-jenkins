@@ -47,7 +47,7 @@ jobs:
         id: version-info
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT 
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Project version: $VERSION"
           
           if [[ $VERSION == *-SNAPSHOT ]]; then
