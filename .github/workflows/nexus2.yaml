@@ -43,6 +43,7 @@ jobs:
           path: target/*.jar
 
       # Check SNAPSHOT or Release version from pom.xml
+      # STEP 1: Get version info
       - name: Get version info
         id: version-info
         run: |
@@ -52,30 +53,37 @@ jobs:
             | tr -d '\r')
       
           echo "Cleaned Maven version: '$VERSION'"
-      
-          # Output clean version to GitHub Actions
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       
           if [[ "$VERSION" == *-SNAPSHOT ]]; then
             echo "version_type=snapshot" >> "$GITHUB_OUTPUT"
             echo "nexus_repo=snapshot" >> "$GITHUB_OUTPUT"
+            echo "is_snapshot=true" >> "$GITHUB_OUTPUT"
           else
             echo "version_type=release" >> "$GITHUB_OUTPUT"
             echo "nexus_repo=release" >> "$GITHUB_OUTPUT"
+            echo "is_snapshot=false" >> "$GITHUB_OUTPUT"
           fi
-
-
-     # Configure nexus
-
+      
+      # STEP 2a: Set env based on snapshot
+      - name: Set CUSTOM_SECRET to SNAPSHOT token
+        if: ${{ steps.version-info.outputs.is_snapshot == 'true' }}
+        run: echo "CUSTOM_REPO_NAME_SECRET=${{ secrets.NEXUS_SNAPSHOT_REPO }}" >> $GITHUB_ENV
+      
+      - name: Set CUSTOM_SECRET to RELEASE token
+        if: ${{ steps.version-info.outputs.is_snapshot != 'true' }}
+        run: echo "CUSTOM_REPO_NAME_SECRET=${{ secrets.NEXUS_RELEASE_REPO }}" >> $GITHUB_ENV
+      
+      # STEP 3: Configure Nexus
       - name: Configure Maven for Nexus
         uses: s4u/maven-settings-action@v2
         with:
           servers: '[{ "id": "nexus", "username": "${{ secrets.NEXUS_USERNAME }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }]'
-          
-      #  Deploy to appropriate Nexus repository
-      - name: Deploy main JAR only to Nexus 
+      
+      # STEP 4: Deploy JAR
+      - name: Deploy main JAR to Nexus
         run: |
-          JAR_FILE=$(find target -type f -name "*.jar"| head -n 1)
+          JAR_FILE=$(find target -type f -name "*.jar" | head -n 1)
           echo "Found JAR: $JAR_FILE"
       
           mvn deploy:deploy-file \
@@ -85,5 +93,6 @@ jobs:
             -Dversion=${{ steps.version-info.outputs.version }} \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
-            -Durl=http://192.168.178.94:8082/repository/Calc-maven-hosted-repo/ \
-            -DgeneratePom=true
+            -Durl="http://192.168.178.94:8082/repository/$CUSTOM_REPO_NAME_SECRET/" \
+            -DgeneratePom=false
+
