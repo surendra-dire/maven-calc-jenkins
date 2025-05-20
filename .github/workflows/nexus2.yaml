@@ -9,7 +9,7 @@ env:
   NEXUS_URL: ${{ secrets.NEXUS_URL }}
   NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
   NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-  NEXUS_SERVER_RUL: ${{ secrets.NEXUS_SERVER_RUL }}
+  #NEXUS_SERVER_URL: ${{ secrets.NEXUS_SERVER_URL }}
   
 jobs:
   build:
@@ -86,6 +86,6 @@ jobs:
             -Dversion=${{ steps.version-info.outputs.version }} \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
-            -Durl="$NEXUS_SERVER_RUL/repository/$CUSTOM_REPO_NAME_SECRET/" \
+            -Durl="${{ secrets.NEXUS_SERVER_URL }}/repository/$CUSTOM_REPO_NAME_SECRET/" \
             -DgeneratePom=false
 
