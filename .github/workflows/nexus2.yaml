@@ -9,9 +9,7 @@ env:
   NEXUS_URL: ${{ secrets.NEXUS_URL }}
   NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
   NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-
-  //MAVEN_REPO_PATH: ${{ secrets.MAVEN_REPO_PATH || 'repository/maven-releases' }}
-
+  NEXUS_SERVER_RUL: ${{ secrets.NEXUS_SERVER_RUL }}
   
 jobs:
   build:
@@ -42,8 +40,7 @@ jobs:
           name: jar
           path: target/*.jar
 
-      # Check SNAPSHOT or Release version from pom.xml
-      # STEP 1: Get version info
+      # Get SNAPSHOT or Release version from pom.xml
       - name: Get version info
         id: version-info
         run: |
@@ -56,12 +53,8 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       
           if [[ "$VERSION" == *-SNAPSHOT ]]; then
-            echo "version_type=snapshot" >> "$GITHUB_OUTPUT"
-            echo "nexus_repo=snapshot" >> "$GITHUB_OUTPUT"
             echo "is_snapshot=true" >> "$GITHUB_OUTPUT"
           else
-            echo "version_type=release" >> "$GITHUB_OUTPUT"
-            echo "nexus_repo=release" >> "$GITHUB_OUTPUT"
             echo "is_snapshot=false" >> "$GITHUB_OUTPUT"
           fi
       
@@ -93,6 +86,6 @@ jobs:
             -Dversion=${{ steps.version-info.outputs.version }} \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
-            -Durl="http://192.168.178.94:8082/repository/$CUSTOM_REPO_NAME_SECRET/" \
+            -Durl="$NEXUS_SERVER_RUL/repository/$CUSTOM_REPO_NAME_SECRET/" \
             -DgeneratePom=false
 
