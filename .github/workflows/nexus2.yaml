@@ -1,15 +1,8 @@
 # .github/workflows/build.yml
-name: Build
+name: Build-Nexus
 
 on:
   workflow_dispatch:
-  
-env:
-
-  NEXUS_URL: ${{ secrets.NEXUS_URL }}
-  NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-  NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-  #NEXUS_SERVER_URL: ${{ secrets.NEXUS_SERVER_URL }}
   
 jobs:
   build:
@@ -40,7 +33,7 @@ jobs:
           name: jar
           path: target/*.jar
 
-      # Get SNAPSHOT or Release version from pom.xml
+      # Step 1: Get SNAPSHOT/Release version from pom.xml
       - name: Get version info
         id: version-info
         run: |
@@ -58,7 +51,7 @@ jobs:
             echo "is_snapshot=false" >> "$GITHUB_OUTPUT"
           fi
       
-      # STEP 2a: Set env based on snapshot
+      # Step 2: Set env based on snapshot
       - name: Set CUSTOM_SECRET to SNAPSHOT token
         if: ${{ steps.version-info.outputs.is_snapshot == 'true' }}
         run: echo "CUSTOM_REPO_NAME_SECRET=${{ secrets.NEXUS_SNAPSHOT_REPO }}" >> $GITHUB_ENV
