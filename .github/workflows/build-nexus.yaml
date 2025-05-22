@@ -80,6 +80,6 @@ jobs:
             -Dpackaging=jar \
             -DrepositoryId=nexus \
             -Durl="${{ secrets.NEXUS_SERVER_URL }}/repository/$CUSTOM_REPO_NAME_SECRET/" \
-            -DgeneratePom=false
+            -DgeneratePom=false \
             -Dusername="${{ secrets.NEXUS_USERNAME }}" \
-            -Dpassword="${{ secrets.NEXUS_PASSWORD }}
+            -Dpassword="${{ secrets.NEXUS_PASSWORD }}"
