@@ -60,11 +60,11 @@ jobs:
         if: ${{ steps.version-info.outputs.is_snapshot != 'true' }}
         run: echo "REPO_NAME=${{ secrets.NEXUS_RELEASE_REPO }}" >> $GITHUB_ENV
       
-      # STEP 3: Configure Nexus
-      #- name: Configure Maven for Nexus
-        #uses: s4u/maven-settings-action@v2
-        #with:
-          #servers: '[{ "id": "nexus", "username": "${{ secrets.NEXUS_USERNAME }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }]'
+      # STEP 3: Configure maven to connect to a nexus remote repository
+      - name: Configure Maven for Nexus
+        uses: s4u/maven-settings-action@v2
+        with:
+          servers: '[{ "id": "nexus", "username": "${{ secrets.NEXUS_USERNAME }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }]'
       
       # STEP 4: Deploy JAR
       - name: Deploy main JAR to Nexus
@@ -81,6 +81,4 @@ jobs:
             -Dpackaging=jar \
             -DrepositoryId=nexus \
             -Durl="${{ secrets.NEXUS_SERVER_URL }}/repository/$REPO_NAME/" \
-            -DgeneratePom=false \
-            -Dusername="${{ secrets.NEXUS_USERNAME }}" \
-            -Dpassword="${{ secrets.NEXUS_PASSWORD }}"
+            -DgeneratePom=false 
