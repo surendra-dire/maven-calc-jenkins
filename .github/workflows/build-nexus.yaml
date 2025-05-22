@@ -54,11 +54,11 @@ jobs:
       # Step 2: Set env based on snapshot
       - name: Set CUSTOM_SECRET to SNAPSHOT token
         if: ${{ steps.version-info.outputs.is_snapshot == 'true' }}
-        run: echo "CUSTOM_REPO_NAME_SECRET=${{ secrets.NEXUS_SNAPSHOT_REPO }}" >> $GITHUB_ENV
+        run: echo "REPO_NAME=${{ secrets.NEXUS_SNAPSHOT_REPO }}" >> $GITHUB_ENV
       
       - name: Set CUSTOM_SECRET to RELEASE token
         if: ${{ steps.version-info.outputs.is_snapshot != 'true' }}
-        run: echo "CUSTOM_REPO_NAME_SECRET=${{ secrets.NEXUS_RELEASE_REPO }}" >> $GITHUB_ENV
+        run: echo "REPO_NAME=${{ secrets.NEXUS_RELEASE_REPO }}" >> $GITHUB_ENV
       
       # STEP 3: Configure Nexus
       #- name: Configure Maven for Nexus
@@ -79,7 +79,7 @@ jobs:
             -Dversion=${{ steps.version-info.outputs.version }} \
             -Dpackaging=jar \
             -DrepositoryId=nexus \
-            -Durl="${{ secrets.NEXUS_SERVER_URL }}/repository/$CUSTOM_REPO_NAME_SECRET/" \
+            -Durl="${{ secrets.NEXUS_SERVER_URL }}/repository/$REPO_NAME/" \
             -DgeneratePom=false \
             -Dusername="${{ secrets.NEXUS_USERNAME }}" \
             -Dpassword="${{ secrets.NEXUS_PASSWORD }}"
