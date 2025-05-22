@@ -51,12 +51,12 @@ jobs:
             echo "is_snapshot=false" >> "$GITHUB_OUTPUT"
           fi
       
-      # Step 2: Set env based on snapshot
-      - name: Set CUSTOM_SECRET to SNAPSHOT token
+      # Step 2: Set repository name (snapshot/release)
+      - name: Set repository name to snapshot
         if: ${{ steps.version-info.outputs.is_snapshot == 'true' }}
         run: echo "REPO_NAME=${{ secrets.NEXUS_SNAPSHOT_REPO }}" >> $GITHUB_ENV
       
-      - name: Set CUSTOM_SECRET to RELEASE token
+      - name: Set repository name to release
         if: ${{ steps.version-info.outputs.is_snapshot != 'true' }}
         run: echo "REPO_NAME=${{ secrets.NEXUS_RELEASE_REPO }}" >> $GITHUB_ENV
       
@@ -71,7 +71,8 @@ jobs:
         run: |
           JAR_FILE=$(find target -type f -name "*.jar" | head -n 1)
           echo "Found JAR: $JAR_FILE"
-      
+          echo "Target URL: ${{ secrets.NEXUS_SERVER_URL }}/repository/$REPO_NAME/"
+
           mvn deploy:deploy-file \
             -Dfile="$JAR_FILE" \
             -DgroupId=com.example \
