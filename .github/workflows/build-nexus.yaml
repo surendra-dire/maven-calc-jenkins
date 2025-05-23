@@ -1,4 +1,4 @@
-# .github/workflows/build.yml
+# .github/workflows/build-nexus.yaml
 name: Build-Nexus
 
 on:
