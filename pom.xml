@@ -84,7 +84,7 @@
 <distributionManagement>
     <repository>
         <id>my-nexus-release</id>
-        <urlhttp://192.168.178.94:8082/repository/Calc-maven-release-repo/</url>
+        <url>http://192.168.178.94:8082/repository/Calc-maven-release-repo/</url>
     </repository>
     <snapshotRepository>
         <id>my-nexus-snapshot</id>
